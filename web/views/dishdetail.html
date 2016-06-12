@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="confusionApp">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head
+             content must come *after* these tags -->
+        <title>Ristorante Con Fusion: Menu</title>
+        <!-- Bootstrap -->
+        <!-- build:css styles/main.css -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <!-- endbuild -->
+
+    </head>
+
+    <body>
+
+        <div class="container" ng-controller="DishDetailController">
+            <div class="row row-content">
+
+
+                <div class="col-xs-12" ng-if="!showDish">
+                    <h3>{{message}}</h3>
+                </div>
+                <div class="col-xs-12" ng-if="showDish">
+                    <button class="btn btn-xs btn-primary pull-right"
+                            type="button" ui-sref="app.menu">
+                        Back to Menu
+                    </button>
+                    <div class="media-left media-middle">
+                        <img class="media-object img-thumbnail" ng-src="{{dish.image}}" alt="">
+                    </div>
+                    <div class="media-body">
+                        <h2 class="media-heading">{{dish.name}} <span class="label label-danger">{{dish.label}}</span>
+                            <span class="badge">{{dish.price| currency}}</span>
+                        </h2>
+                        <p>{{dish.description}}</p>
+                    </div>
+                </div>
+                <div class="col-xs-9 col-xs-offset-1">
+                    <p>
+                        <strong>Customer comments</strong>  
+                        <span>Sort by: <input type="text" ng-model="sortColumn"/></span>
+                    </p> 
+                    <div ng-repeat="c in dish.comments| orderBy: sortColumn">
+                        <blockquote>
+                            <p>{{c.rating}} Starts</p>
+                            <p>{{c.comment}}</p>                                
+                            <footer>{{c.author}}, {{c.date| date}}</footer>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="col-xs-9 col-xs-offset-1" ng-controller="DishCommentController">
+
+                    <div ng-show="!commentForm.$invalid">
+                        <blockquote>
+                            <p>{{feedback.star}} Starts</p>
+                            <p>{{feedback.comments}}</p>                                
+                            <footer>{{feedback.name}}, {{feedback.date| date}}</footer>
+                        </blockquote>
+                    </div>
+
+                    <form class="form-horizontal" name="commentForm"
+                          ng-submit="submitComment()" novalidate>
+
+                        <!-- Name -->
+                        <div class="form-group" ng-class="{ 'has-error' : commentForm.name.$error.required && !commentForm.name.$pristine }">
+                            <label for="name" class="col-sm-2 control-label">Your Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Your Name"
+                                       ng-model="feedback.name" required>
+                                <span ng-show="commentForm.name.$error.required && !commentForm.name.$pristine" class="help-block">Your name is required.</span>
+                            </div>
+                        </div>
+
+                        <!-- Starts -->
+                        <div class="form-group">
+                            <label for="stars" class="col-sm-2 control-label">Number of Stars</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    <input type="radio" name="stars" id="stars" ng-model="feedback.star" value="1"> 1
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="stars" id="stars" ng-model="feedback.star" value="2"> 2
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="stars" id="stars" ng-model="feedback.star" value="3"> 3
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="stars" id="stars" ng-model="feedback.star" value="4"> 4
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="stars" id="stars" ng-model="feedback.star" value="5"> 5
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Comments -->                        
+                        <div class="form-group" ng-class="{ 'has-error' : commentForm.comments.$error.required && !commentForm.comments.$pristine }">
+                            <label for="comments" class="col-sm-2 control-label">Your Comments</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="12" id="comments" name="comments"
+                                          ng-model="feedback.comments" required>
+                                </textarea>
+                                <span ng-show="commentForm.comments.$error.required && !commentForm.comments.$pristine" class="help-block">Your comments are required.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-primary" ng-disabled="commentForm.$invalid">Submit Comment</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- build:js scripts/main.js -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.1/angular.js"></script>
+        <script src="scripts/app.js" type="text/javascript"></script>
+
+        <!-- endbuild -->
+
+    </body>
+
+</html>
